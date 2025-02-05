@@ -1,16 +1,31 @@
-import { CategorySlider, Hero, Process, TopCollection, TopSeller, Trust } from "../../router";
-import { ProductList } from "../../components/hero/ProductList";
+import {
+    CategorySlider,
+    Hero,
+    Process,
+    TopCollection,
+    TopSeller,
+    Trust,
+} from '../../router';
+import { ProductList } from '../../components/hero/ProductList';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllProducts } from '../../redux/features/productSlice';
 
 export const Home = () => {
-  return (
-    <>
-      <Hero />
-      <CategorySlider />
-      <ProductList />
-      <TopSeller />
-      <Process />
-      <Trust />
-      <TopCollection />
-    </>
-  );
+    const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.product);
+    useEffect(() => {
+        dispatch(getAllProducts());
+    }, [dispatch]);
+    return (
+        <>
+            <Hero />
+            <CategorySlider />
+            <ProductList products={products} />
+            <TopSeller />
+            <Process />
+            <Trust />
+            <TopCollection />
+        </>
+    );
 };
