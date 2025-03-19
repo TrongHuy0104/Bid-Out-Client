@@ -41,6 +41,16 @@ export const sellProductByUser = createAsyncThunk(
         }
     }
 );
+export const confirmProductByUser = createAsyncThunk(
+    'bidding/confirm',
+    async (productId, thunkAPI) => {
+        try {
+            return await biddingService.confirmProductByUser(productId);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
 
 const biddingSlice = createSlice({
     name: 'bidding',
@@ -64,16 +74,16 @@ const biddingSlice = createSlice({
                 state.message = action.payload;
                 toast.error(action.payload);
             })
-            .addCase(sellProductByUser.pending, (state) => {
+            .addCase(confirmProductByUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(sellProductByUser.fulfilled, (state, action) => {
+            .addCase(confirmProductByUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.isError = false;
                 state.message = action.payload;
             })
-            .addCase(sellProductByUser.rejected, (state, action) => {
+            .addCase(confirmProductByUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

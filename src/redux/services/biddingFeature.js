@@ -24,10 +24,18 @@ const sellProductByUser = async (productId) => {
     return response.data;
 };
 
+const confirmProductByUser = async (productId) => {
+    const response = await axios.post(`${BIDDING_URL}/confirm`, productId, {
+        withCredentials: true,
+    });
+    return response.data;
+};
+
 const biddingService = {
     placeBid,
     fetchBiddingHistory,
     sellProductByUser,
+    confirmProductByUser,
 };
 
 export default biddingService;

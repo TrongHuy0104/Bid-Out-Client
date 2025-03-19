@@ -2,6 +2,15 @@ import { TiEyeOutline } from 'react-icons/ti';
 import { CiEdit } from 'react-icons/ci';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+    confirmProductByUser,
+    sellProductByUser,
+} from '../redux/features/biddingSlice';
+import {
+    getAllProductsOfUser,
+    getAllWinedProductsOfUser,
+} from '../redux/features/productSlice';
 
 // export const Table = ({ products, isWon, isAdmin, handleDeleteProduct }) => {
 //     return (
@@ -153,6 +162,7 @@ export const Table = ({
     isAdmin,
     isWon,
 }) => {
+    const dispatch = useDispatch();
     return (
         <>
             <div className="relative overflow-x-auto rounded-lg">
@@ -180,6 +190,11 @@ export const Table = ({
                             {isWon && (
                                 <th scope="col" className="px-6 py-3">
                                     Status
+                                </th>
+                            )}
+                            {isWon && (
+                                <th scope="col" className="px-6 py-3">
+                                    Action
                                 </th>
                             )}
                             {!isWon && (
@@ -315,6 +330,42 @@ export const Table = ({
                                             disabled
                                         >
                                             Victory
+                                        </button>
+                                    </td>
+                                )}
+                                {isWon && (
+                                    <td className="py-3 px-6">
+                                        <button
+                                            className={` ${
+                                                product.isSoldout
+                                                    ? 'bg-green'
+                                                    : 'bg-yellow-500'
+                                            } text-white py-1 px-3 rounded-lg`}
+                                            disabled={product.isSoldout}
+                                            onClick={async () => {
+                                                const isConfirmed =
+                                                    window.confirm(
+                                                        'Are you sure you want to confirm you received product successfully?'
+                                                    );
+                                                if (isConfirmed) {
+                                                    await dispatch(
+                                                        confirmProductByUser({
+                                                            productId:
+                                                                product._id,
+                                                        })
+                                                    );
+                                                    await dispatch(
+                                                        getAllWinedProductsOfUser()
+                                                    );
+                                                    // Call your function here to handle the pending action
+                                                } else {
+                                                    console.log('Cancelled.');
+                                                }
+                                            }}
+                                        >
+                                            {product.isSoldout
+                                                ? 'Received'
+                                                : 'Confirm'}
                                         </button>
                                     </td>
                                 )}
